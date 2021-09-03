@@ -54,14 +54,14 @@ const readSourceConc = () => {
 
     if (source_conc > 20000) {
         warning('Содержание целевого компонента в исходной смеси не должно превышать 2 % об. (20000 млн-1)!')
-        source_conc = 20000
+        //source_conc = 20000
     }
 
     if (lel[component]) {
         const lel05 = lel[component] / 2
         if (source_conc > lel05) {
             warning(`Содержание целевого компонента в исходной ГС не должно превышать 50 % НКПР (${component} - ${res_round(lel05 / 10000)} % об.)!`)
-            source_conc = lel05
+            //source_conc = lel05
         }
     }
 
