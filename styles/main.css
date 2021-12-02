@@ -38,6 +38,17 @@ footer, header {
     color: #fafafa;
 }
 
+header {
+    grid-row: 1;
+    display: grid;
+    grid-template-columns: 300px 1fr;
+}
+
+#about {
+    grid-column: 2;
+    text-align: right;
+}
+
 footer {
     text-align: center;
     flex-shrink: 0;
