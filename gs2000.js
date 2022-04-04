@@ -1,5 +1,5 @@
 import { molar_mass, molar_volume, lel } from './lib/converter.js'
-import { reCalculate, calculate, coefficients, components, calcCoefficient } from './lib/gs2000.lib.js'
+import { reCalculate, calculate, coefficients, components } from './lib/gs2000.lib.js'
 
 const get_valves = () => {
     let valves = []
@@ -8,6 +8,10 @@ const get_valves = () => {
         valves.push(document.getElementById(`v${i}`))
     }
     return valves
+}
+
+const sum = (vals) => {
+    return vals.reduce( (a, b) => a + b, 0)
 }
 
 /** Массив переключателей клапанов */
@@ -19,7 +23,7 @@ valves.forEach( (valve) => {
         const states = read_valves_states()
         const in_data = readData()
         const out_data = reCalculate({coeff: in_data.coeff, 
-            source_conc: in_data.source_conc, 
+            sourceConc: in_data.sourceConc, 
             valves: states,
         })
         out_data.target_unit = in_data.target_unit
@@ -42,7 +46,7 @@ const h2sCorrection = ({conc, component}) => {
 /** Чтение и валидация концентрации исходной ГС. */
 const readSourceConc = () => {
     const source_unit = document.getElementById('source_unit').value
-    let source_conc = parseFloat(document.getElementById('source_conc').value.replace(',', '.'))
+    let sourceConc = parseFloat(document.getElementById('source_conc').value.replace(',', '.'))
     const component = document.getElementById('component').value
     let k = 1
 
@@ -50,37 +54,37 @@ const readSourceConc = () => {
         k = 10000
     }
 
-    source_conc *= k
+    sourceConc *= k
 
-    if (source_conc > 20000) {
+    if (sourceConc > 20000) {
         warning('Содержание целевого компонента в исходной смеси не должно превышать 2 % об. (20000 млн-1)!')
-        //source_conc = 20000
+        //sourceConc = 20000
     }
 
     if (lel[component]) {
         const lel05 = lel[component] / 2
-        if (source_conc > lel05) {
+        if (sourceConc > lel05) {
             warning(`Содержание целевого компонента в исходной ГС не должно превышать 50 % НКПР (${component} - ${res_round(lel05 / 10000)} % об.)!`)
-            //source_conc = lel05
+            //sourceConc = lel05
         }
     }
 
-    document.getElementById('source_conc').value = source_conc / k
+    document.getElementById('source_conc').value = sourceConc / k
     
-    return source_conc
+    return sourceConc
 }
 
 /** Чтение и валидация целевой концентрации. */
 const readTargetConc = () => {
-    const source_conc = readSourceConc()
+    const sourceConc = readSourceConc()
     let target_unit = document.getElementById('target_unit').value
     const diluent = document.getElementById('diluent').value
     const component = document.getElementById('component').value
-    let target_conc = parseFloat(document.getElementById('target_conc').value.replace(',', '.'))
+    let targetConc = parseFloat(document.getElementById('target_conc').value.replace(',', '.'))
     let k = 1
 
     log('********Calculate*********')
-    log(`Заданная концентрация:\n\t${target_conc} ${target_unit}`)
+    log(`Заданная концентрация:\n\t${targetConc} ${target_unit}`)
     if (target_unit == '%') {
         k = 10000
     } else if (target_unit == 'mg/m^3') {
@@ -93,15 +97,15 @@ const readTargetConc = () => {
         }
     }
 
-    target_conc *= k
-    const max_k = calcCoefficient(coefficients[diluent])
+    targetConc *= k
+    const max_k = sum(coefficients[diluent])
     const min_k = coefficients[diluent][0]
 
-    let max_conc = source_conc / max_k
-    let min_conc = source_conc / min_k
+    let max_conc = sourceConc / (1 / max_k + 1)
+    let min_conc = sourceConc / (1 / min_k + 1)
 
-    if (target_conc > max_conc) {
-        target_conc = max_conc
+    if (targetConc > max_conc) {
+        targetConc = max_conc
         max_conc = res_round(convertUnits({
             conc: max_conc,
             target_unit: target_unit,
@@ -113,10 +117,10 @@ const readTargetConc = () => {
         document.getElementById('target_conc').value = max_conc
         warning(`Концентрация ГС на выходе не может быть больше ${max_conc} ${target_unit}!`)
     }
-    if (target_conc < min_conc) {
-        target_conc = min_conc
+    if (targetConc < min_conc) {
+        targetConc = min_conc
         min_conc = res_round(convertUnits({
-            conc: source_conc / min_k,
+            conc: sourceConc / min_k,
             target_unit: target_unit,
             diluent: diluent,
             component: component,
@@ -127,7 +131,7 @@ const readTargetConc = () => {
         warning(`Концентрация ГС на выходе не может быть меньше ${min_conc} ${target_unit}!`)
     }
 
-    return target_conc
+    return targetConc
 }
 
 document.getElementById('source_conc').addEventListener('change', readSourceConc)
@@ -175,16 +179,16 @@ const readData = () => {
     const source_unit = document.getElementById('source_unit').value
     let target_unit = document.getElementById('target_unit').value
     const component = document.getElementById('component').value
-    let source_conc = readSourceConc()
-    let target_conc = readTargetConc()
+    let sourceConc = readSourceConc()
+    let targetConc = readTargetConc()
 
     return {
         component: component,
         diluent: diluent,
         coeff: coefficients[diluent],
-        source_conc: source_conc,
+        sourceConc: sourceConc,
         source_unit: source_unit,
-        target_conc: target_conc,
+        targetConc: targetConc,
         target_unit: target_unit,
     }
 }
