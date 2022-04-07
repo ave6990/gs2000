@@ -1,5 +1,5 @@
 import { molar_mass, molar_volume, lel } from './lib/converter.js'
-import { reCalculate, calculate, coefficients, components } from './lib/gs2000.lib.js'
+import { reCalculate, calculate, minConc, maxConc, coefficients, components } from './lib/gs2000.lib.js'
 
 const get_valves = () => {
     let valves = []
@@ -98,11 +98,9 @@ const readTargetConc = () => {
     }
 
     targetConc *= k
-    const max_k = sum(coefficients[diluent])
-    const min_k = coefficients[diluent][0]
 
-    let max_conc = sourceConc / (1 / max_k + 1)
-    let min_conc = sourceConc / (1 / min_k + 1)
+    let max_conc = maxConc(coeff: coefficients[diluent], sourceConc: sourceConc)
+    let min_conc = minConc(coeff: coefficients[diluent], sourceConc: sourceConc)
 
     if (targetConc > max_conc) {
         targetConc = max_conc
@@ -113,20 +111,18 @@ const readTargetConc = () => {
             component: component,
         }))
 
-        k = max_k
         document.getElementById('target_conc').value = max_conc
         warning(`Концентрация ГС на выходе не может быть больше ${max_conc} ${target_unit}!`)
     }
     if (targetConc < min_conc) {
         targetConc = min_conc
         min_conc = res_round(convertUnits({
-            conc: sourceConc / min_k,
+            conc: min_conc,
             target_unit: target_unit,
             diluent: diluent,
             component: component,
         }))
 
-        k = min_k
         document.getElementById('target_conc').value = min_conc
         warning(`Концентрация ГС на выходе не может быть меньше ${min_conc} ${target_unit}!`)
     }
