@@ -99,8 +99,8 @@ const readTargetConc = () => {
 
     targetConc *= k
 
-    let max_conc = maxConc( {coeff: coefficients[diluent], sourceConc: sourceConc, } )
-    let min_conc = minConc( {coeff: coefficients[diluent], sourceConc: sourceConc, })
+    let max_conc = maxConc( {'coeff': coefficients[diluent], 'sourceConc': sourceConc, } )
+    let min_conc = minConc( {'coeff': coefficients[diluent], 'sourceConc': sourceConc, })
 
     if (targetConc > max_conc) {
         targetConc = max_conc
