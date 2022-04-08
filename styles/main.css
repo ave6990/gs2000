@@ -20,10 +20,29 @@ p {
 main {
     margin: 10px;
     flex-grow: 1;
+    /*display: flex;
+    flex-flow: row wrap;*/
 }
 
-section {
+/*#input_data {
+    flex-grow: 0.4;
+}
+
+#result {
+    flex-grow: 1;
+}*/
+
+.input_single {
+    width: 300px;
+}
+
+.input_part {
+    width: 143px;
+}
+
+section main {
     margin: 5px;
+    display: block;
 }
 
 section header {
@@ -56,6 +75,7 @@ footer {
 
 label {
     display: block;
+    margin-top: 10px;
 }
 
 input, select, button {
@@ -69,6 +89,7 @@ input, select, button {
 
 button {
     color: #222;
+    margin: 10px 0;
 }
 
 #valves {

@@ -11,40 +11,40 @@
         <p id="about"><a href="https://ave6990.github.io/gs2000">О программе</a></p>
     </header>
     <main>
-        <section id=input_date>
+        <section id=input_data>
             <header>Исходные данные</header>
             <main>
                 <div >
                     <label for=component>Целевой компонент:</label>
-                    <select id=component>
+                    <select id=component class=input_single>
                         <option value="none" default>не выбран</option>
                     </select>
                 </div>
                 <div>
                     <label for=diluent>Газ-разбавитель:</label>
-                    <select id=diluent>
+                    <select id=diluent class=input_single>
                         <option value="air">воздух</option>
                         <option value="n2">азот</option>
                     </select>
                 </div>
                 <div>
                     <label for=source_conc>Концентрация исходной ГС:</label>
-                    <input type=text id=source_conc pattern='\d+[\.]?\d*'>
-                    <select id="source_unit" >
+                    <input type=text id=source_conc class=input_part pattern='\d+[\.]?\d*'>
+                    <select id="source_unit" class=input_part>
                         <option value="ppm">ppm</option>
                         <option value="%">%</option>
                     </select>
                 </div>
                 <div>
                     <label for=target_conc>Требуемая концентрация ГС на выходе:</label>
-                    <input type=text id=target_conc pattern='\d+[\.]?\d*'>
-                    <select id="target_unit" >
+                    <input type=text id=target_conc class=input_part pattern='\d+[\.]?\d*'>
+                    <select id="target_unit"  class=input_part>
                         <option value="ppm">ppm</option>
                         <option value="%">%</option>
                         <option value="mg/m^3">mg/m^3</option>
                     </select>
                 </div>
-                <button id=btn_calc>Расчитать</button>
+                <button id=btn_calc class=input_single>Расчитать</button>
             </main>
         </section>
         <section id=result>
@@ -95,12 +95,10 @@
                 </div>
                 <div>
                     <label for="result_conc">Расчетная концентрация ГС на выходе:</label>
-                    <input type="text" id="result_conc" disabled>
+                    <input type="text" id="result_conc"  class=input_single disabled>
                 </div>
+                <textarea id="info"></textarea>
              </main>     
-        </section>
-        <section>
-            <textarea id="info"></textarea>
         </section>
     </main>
     <footer>
