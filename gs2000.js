@@ -17,13 +17,13 @@ for (let i = 1; i <= 10; i++) {
 /** Обработчик событий на переключатели. */
 valves.forEach( (valve) => {
     valve.addEventListener("change", (event) => {
-        const in_data = Object.assign({}, readData())
-        in_data.valves = readValvesState()
-        const out_data = Object.assign({}, in_data, reCalculate(in_data))
-        out_data.conc += h2sCorrection(out_data)
+        const inData = Object.assign({}, readData())
+        inData.valves = readValvesState()
+        const outData = Object.assign({}, inData, reCalculate(inData))
+        outData.conc += h2sCorrection(outData)
         outData.concInUnit = convert(outData.conc, 'ppm', outData.targetUnit,
             outData.component, outData.diluent)
-        displayResults(out_data)
+        displayResults(outData)
     })
 })
 
@@ -92,7 +92,7 @@ document.getElementById('btn_calc').addEventListener('click', (event) => {
     clear_valves()
     const inData = readData()
     const outData = Object.assign({}, inData, calculate(inData))
-    out_data.conc += h2sCorrection(out_data)
+    outData.conc += h2sCorrection(outData)
     outData.concInUnit = convert(outData.conc, 'ppm', outData.targetUnit,
         outData.component, outData.diluent)
     displayResults(outData)
