@@ -23,12 +23,13 @@ valves.forEach( (valve) => {
         outData.conc += h2sCorrection(outData)
         outData.concInUnit = convert(outData.conc, 'ppm', outData.targetUnit,
             outData.component, outData.diluent)
+        document.getElementById('target_conc').value = resRound(outData.concInUnit)
         displayResults(outData)
     })
 })
 
 /** Сбросить положение переключателей. */
-const clear_valves = () => {
+const clearValves = () => {
     valves.forEach( (valve) => {
         valve.checked = false
     })
@@ -68,7 +69,7 @@ const displayResults = (data) => {
     }
     
     log(`${'*'.repeat(14)}End calculate${'*'.repeat(14)}`)
-    document.getElementById('result_conc').value = `${res_round(data.concInUnit)} ${data.targetUnit}`
+    document.getElementById('result_conc').value = `${resRound(data.concInUnit)} ${data.targetUnit}`
 
     data.valves.forEach( (valve) => {
         valves[valve - 1].checked = true
@@ -89,7 +90,7 @@ const clearLog = () => {
 document.getElementById('info').addEventListener('dblclick', clearLog)
 
 document.getElementById('btn_calc').addEventListener('click', (event) => {
-    clear_valves()
+    clearValves()
     const inData = readData()
     const outData = Object.assign({}, inData, calculate(inData))
     outData.conc += h2sCorrection(outData)
@@ -116,7 +117,7 @@ components.forEach( (c) => {
 } )
 
 /** Округление результата (~ на 2 порядка точнее погрешности генератора) */
-const res_round = (val) => {
+const resRound = (val) => {
     if (val == 0) {
         return 0
     }
