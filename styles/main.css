@@ -1,13 +1,25 @@
+:root {
+    --font-color: darkblue;
+    --font-size: 12pt;
+    --sub-font-size: 8pt;
+    --main-color: #034769;
+    --contrast-color: white;
+    --border-color: #086fa1;
+    --border-width: 1px;
+    --input-width: 300px;
+    --input-half-width: calc(var(--input-width) / 2 - 7px);
+    --toggle-size: 30px;
+}
+
 html {
-    background: #ddd;
+    background: #aaa;
     height: 100%;
 }
 
 body {
     margin: 0px;
-    color: #222;
-    background: #fcfcfc;
-    font: 12pt sans-serif;
+    background: var(--contrast-color);
+    font: var(--font-size) sans-serif;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -33,11 +45,11 @@ main {
 }*/
 
 .input_single {
-    width: 300px;
+    width: var(--input-width);
 }
 
 .input_part {
-    width: 143px;
+    width: var(--input-half-width);
 }
 
 section main {
@@ -46,15 +58,15 @@ section main {
 }
 
 section header {
-    font-size: 12pt;
+    font-size: var(--font-size);
     border-radius: 10px;
 }
 
 footer, header {
     font-size: 18px;
     padding: 6px;
-    background: #034769;
-    color: #fafafa;
+    background: var(--main-color);
+    color: var(--contrast-color);
 }
 
 header {
@@ -78,22 +90,30 @@ label {
     margin-top: 10px;
 }
 
-input, select, button {
+input, select, button, textarea {
+    color: var(--font-color);
     margin: 5px;
-    font-size: 12pt;
-    border-color: #086fa1;
+    font-size: var(--font-size);
+    border-color: var(--border-color);
     border-style: solid;
-    border-width: 1px;
+    border-width: var(--border-width);
     border-radius: 5px;
 }
 
+#target_conc {
+    background: var(--contrast-color);
+}
+
+textarea {
+    font-size: var(--sub-font-size);
+}
+
 button {
-    color: #222;
-    margin: 10px 0;
+    margin: 10px 5px;
 }
 
 #valves {
-    margin: 10px 0;
+    margin: calc(var(--toggle-size) / 3) 0;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -101,18 +121,18 @@ button {
 
 #valves label {
     margin: 0;
-    width: 30px;
+    width: var(--toggle-size);
     text-align: center;
 }
 
 .toggle_button {
     margin: 0;
-    height: 60px;
-    width: 30px;
+    height: calc(var(--toggle-size) * 2);
+    width: var(--toggle-size);
     vertical-align: center;
-    background: #fff;
-    border: 1px solid #086fa1;
-    border-radius: 15px;
+    background: var(--contrast-color);
+    border: var(--border-width) solid var(--border-color);
+    border-radius: calc(var(--toggle-size) / 2);
     outline: none;
     position: relative;
     display: inline-block;
@@ -124,17 +144,17 @@ button {
     content: "";
     display: inline-block;
     position: absolute;
-    left: 1px;
+    left: 2px;
     top: 2px;
-    width: 26px;
-    height: 26px;
+    width: calc(var(--toggle-size) - 6px);
+    height: calc(var(--toggle-size) - 6px);
     background-color: gray;
     border-radius: 50%;
     transform: translateY(0);
 }
 
 .toggle_button:checked::after {
-    transform: translateY(calc(100% + 2px));
+    transform: translateY(calc(100% + 6px));
     background-color: red;
 }
 
@@ -148,11 +168,11 @@ button {
 }
 
 a:link {
-    color: #fff;
+    color: var(--contrast-color);
 }
 
 a:visited {
-    color: #fff;
+    color: var(--contrast-color);
 }
 
 #info {

@@ -24,6 +24,8 @@ valves.forEach( (valve) => {
         outData.concInUnit = convert(outData.conc, 'ppm', outData.targetUnit,
             outData.component, outData.diluent)
         document.getElementById('target_conc').value = resRound(outData.concInUnit)
+        outData.targetConc = outData.conc
+        outData.targetConcInUnit = outData.concInUnit
         displayResults(outData)
     })
 })
