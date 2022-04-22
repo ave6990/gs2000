@@ -159,12 +159,15 @@ const readData = () => {
     data.targetConcInUnit = parseFloat(document.getElementById('target_conc').value.replace(',', '.'))
     data.targetConc = convert(data.targetConcInUnit, data.targetUnit,
         'ppm', data.component, data.diluent)
+    data.error = ''
 
     /* Проверка исходных данных */
     try {
         checkInData(data)
     } catch (e) {
-        warning(`\n${e.name}\n\t${e.message}\n`)
+        const msg = `${e.name}: ${e.message}`
+        data.error = msg
+        warning(msg)
     }
 
     return data
