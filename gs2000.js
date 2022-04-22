@@ -20,10 +20,10 @@ valves.forEach( (valve) => {
         const inData = Object.assign({}, readData())
         inData.valves = readValvesState()
         const outData = Object.assign({}, inData, reCalculate(inData))
-        outData.conc += h2sCorrection(outData)
+        outData.h2sCorrection = h2sCorrection(outData)
+        outData.conc += outData.h2sCorrection
         outData.concInUnit = convert(outData.conc, 'ppm', outData.targetUnit,
             outData.component, outData.diluent)
-        document.getElementById('target_conc').value = resRound(outData.concInUnit)
         outData.targetConc = outData.conc
         outData.targetConcInUnit = outData.concInUnit
         displayResults(outData)
@@ -61,6 +61,8 @@ const log = (s) => {
 /** Вывод результата. */
 const displayResults = (data) => {
     const time = new Date()
+    const resultConc = document.getElementById('result_conc')
+
     log(`\n\n${time}`)
     log(`${'*'.repeat(16)}Calculate${'*'.repeat(16)}`)
 
@@ -71,17 +73,19 @@ const displayResults = (data) => {
     }
     
     log(`${'*'.repeat(14)}End calculate${'*'.repeat(14)}`)
-    document.getElementById('result_conc').value = `${resRound(data.concInUnit)} ${data.targetUnit}`
+    if (data.error) {
+        resultConc.classList.add('error')
+        resultConc.value = data.error
+        clearValves()
+        console.log('clear')
+    } else {
+        resultConc.classList.remove('error')
+        resultConc.value = `${resRound(data.concInUnit)} ${data.targetUnit}`
+    }
 
     data.valves.forEach( (valve) => {
         valves[valve - 1].checked = true
     } )
-}
-
-const warning = (message) => {
-    const time = new Date()
-    log(`\n${time}`)
-    log(`WARNING!!!:\n\t${message}\n`)
 }
 
 /** Очистить текстовое поле лога. */
@@ -95,7 +99,8 @@ document.getElementById('btn_calc').addEventListener('click', (event) => {
     clearValves()
     const inData = readData()
     const outData = Object.assign({}, inData, calculate(inData))
-    outData.conc += h2sCorrection(outData)
+    outData.h2sCorrection = h2sCorrection(outData)
+    outData.conc += outData.h2sCorrection
     outData.concInUnit = convert(outData.conc, 'ppm', outData.targetUnit,
         outData.component, outData.diluent)
     displayResults(outData)
@@ -103,8 +108,7 @@ document.getElementById('btn_calc').addEventListener('click', (event) => {
 
 /** Коррекция расчета малых концентраций сероводорода согласно РЭ. */
 const h2sCorrection = ({conc, component}) => {
-    if (component = 'H2S' && conc >= 0.005 && conc <= 0.01) {
-        log(`H2S коррекция:\n\t${conc} + 0.00025`)
+    if (component.toUpperCase() == 'H2S' && conc >= 0.005 && conc <= 0.01) {
         return 0.00025
     }
     return 0
@@ -167,7 +171,6 @@ const readData = () => {
     } catch (e) {
         const msg = `${e.name}: ${e.message}`
         data.error = msg
-        warning(msg)
     }
 
     return data

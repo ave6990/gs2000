@@ -163,8 +163,8 @@ button {
     max-width: 50px;
 }
 
-.warning {
-    background-color: yellow;
+.error {
+    color: red;
 }
 
 a:link {
