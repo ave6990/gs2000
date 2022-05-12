@@ -58,21 +58,37 @@ const log = (s) => {
     textarea.scrollTop = textarea.scrollHeight
 }
 
+const zeroFill = (val) => {
+    if (parseInt(val) < 10) {
+        return `0${val}`
+    }
+    return `${val}`
+}
+
 /** Вывод результата. */
 const displayResults = (data) => {
     const time = new Date()
     const resultConc = document.getElementById('result_conc')
+    let msg = ''
 
-    log(`\n\n${time}`)
-    log(`${'*'.repeat(16)}Calculate${'*'.repeat(16)}`)
-
-    for (const key of Object.keys(data)) {
-        if (key != 'coeff') {
-            log(`${key}:${' '.repeat(20 - key.length)} ${data[key]}`)
+    msg = `${zeroFill(time.getDate())}.${zeroFill(time.getMonth())}.${time.getFullYear()}`
+    msg = `${msg} ${zeroFill(time.getHours())}:${zeroFill(time.getMinutes())}:${zeroFill(time.getSeconds())}`
+    msg = `${msg} ${data.component}+${data.diluent} (${data.sourceConcInUnit} ${data.sourceUnit} -> `
+    msg = `${msg}${data.targetConcInUnit} ${data.targetUnit}`
+    msg = `${msg} = ${data.concInUnit} ${data.targetUnit}`
+    msg = `${msg}${data.h2sCorrection ? ' + H2S correction' : ''}`
+    msg = `${msg}) [${data.valves.sort((a, b) => {
+        if (a < b) {
+            return -1
         }
-    }
-    
-    log(`${'*'.repeat(14)}End calculate${'*'.repeat(14)}`)
+        if (a > b) {
+            return 1
+        }
+        return 0
+    })}] ${data.error ? `{${data.error}}`: ''}`
+
+    log(msg)
+ 
     if (data.error) {
         resultConc.classList.add('error')
         resultConc.value = `${resRound(data.concInUnit)} ${data.targetUnit} {${data.error}}`
