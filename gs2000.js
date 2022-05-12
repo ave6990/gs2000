@@ -75,7 +75,7 @@ const displayResults = (data) => {
     log(`${'*'.repeat(14)}End calculate${'*'.repeat(14)}`)
     if (data.error) {
         resultConc.classList.add('error')
-        resultConc.value = data.error
+        resultConc.value = `${resRound(data.concInUnit)} ${data.targetUnit} {${data.error}}`
         clearValves()
         console.log('clear')
     } else {
