@@ -120,6 +120,7 @@ document.getElementById('btn_calc').addEventListener('click', (event) => {
     outData.concInUnit = convert(outData.conc, 'ppm', outData.targetUnit,
         outData.component, outData.diluent)
     displayResults(outData)
+    console.log(outData)
 } )
 
 /** Коррекция расчета малых концентраций сероводорода согласно РЭ. */
