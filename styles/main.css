@@ -80,6 +80,12 @@ header {
     text-align: right;
 }
 
+#about img {
+    width: 40px;
+    height: 40px;
+    filter: invert(1);
+}
+
 footer {
     text-align: center;
     flex-shrink: 0;
