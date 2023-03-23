@@ -174,10 +174,10 @@ const readData = () => {
     data.sourceUnit = document.getElementById('source_unit').value
     data.targetUnit = document.getElementById('target_unit').value
     data.component = document.getElementById('component').value
-    data.sourceConcInUnit = parseFloat(document.getElementById('source_conc').value.replace(',', '.'))
+    data.sourceConcInUnit = parseFloat(document.getElementById('source_conc').value.replace(',', '.').replace(' ', ''))
     data.sourceConc = convert(data.sourceConcInUnit, data.sourceUnit,
         'ppm', data.component, data.diluent)
-    data.targetConcInUnit = parseFloat(document.getElementById('target_conc').value.replace(',', '.'))
+    data.targetConcInUnit = parseFloat(document.getElementById('target_conc').value.replace(',', '.').replace(' ', ''))
     data.targetConc = convert(data.targetConcInUnit, data.targetUnit,
         'ppm', data.component, data.diluent)
     data.error = ''
