@@ -3,8 +3,8 @@ import { reCalculate, calculate, minConc, maxConc, components,
     mapCoefficients, checkInData } from './lib/gs2000.lib.js'
 import { passCoefficients } from './lib/coefficients.js'
 
-const coefficients = { 'air': mapCoefficients(passCoefficients.air),
-    'n2': mapCoefficients(passCoefficients.n2),
+const coefficients = (device, diluent) => {
+    return mapCoefficients(passCoefficients[device][diluent])
 }
 
 /** Массив переключателей клапанов */
@@ -71,7 +71,8 @@ const displayResults = (data) => {
     const resultConc = document.getElementById('result_conc')
     let msg = ''
 
-    msg = `${zeroFill(time.getDate())}.${zeroFill(time.getMonth())}.${time.getFullYear()}`
+    msg = `${data.serial_number}:`
+    msg = `${msg} ${zeroFill(time.getDate())}.${zeroFill(time.getMonth())}.${time.getFullYear()}`
     msg = `${msg} ${zeroFill(time.getHours())}:${zeroFill(time.getMinutes())}:${zeroFill(time.getSeconds())}`
     msg = `${msg} ${data.component}+${data.diluent} (${data.sourceConcInUnit} ${data.sourceUnit} -> `
     msg = `${msg}${data.targetConcInUnit} ${data.targetUnit}`
@@ -139,6 +140,14 @@ components.forEach( (c) => {
     document.getElementById('component').append(option)
 } )
 
+/** Наполнение listBox списком заводских номеров из файла lib/coefficients.js. */
+passCoefficients.forEach( (c, index) => {
+    let option = document.createElement('option')
+    option.value = index 
+    option.text = c.serial_number
+    document.getElementById('device').append(option)
+} )
+
 /** Округление результата (~ на 2 порядка точнее погрешности генератора) */
 const resRound = (val) => {
     if (val == 0) {
@@ -169,8 +178,10 @@ const resRound = (val) => {
 /** Чтение исходных данных. */
 const readData = () => {
     const data = {}
+    data.device = document.getElementById('device').value
+    data.serial_number = passCoefficients[data.device].serial_number
     data.diluent = document.getElementById('diluent').value
-    data.coeff = coefficients[data.diluent]
+    data.coeff = coefficients(data.device, data.diluent)
     data.sourceUnit = document.getElementById('source_unit').value
     data.targetUnit = document.getElementById('target_unit').value
     data.component = document.getElementById('component').value
